@@ -15,10 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, re_path, include
+from allauth.account.views import confirm_email
 
 urlpatterns = [
     path("api/v1/", include("apps.users.urls")),
     path("api/v1/", include("apps.tasks.urls")),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
+    re_path(
+        r'^dj-rest-auth/registration/account-confirm-email/(?P<key>[-:\w]+)/$',
+        confirm_email, name='account_confirm_email'
+    ),
     path('admin/', admin.site.urls),
 ]
